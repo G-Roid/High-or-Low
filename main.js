@@ -1,27 +1,29 @@
 // global variables
 let choice; 
+let winFactor = 1.5;
 
 // Play again button - fetch new deck -> start new game
 document.querySelector('#playAgain').addEventListener('click', newDeck)
 
 // check unique for unique deck id
-if (!localStorage.getItem('deckId')) {
-    newDeck()    
+// if (!localStorage.getItem('deckId')) {
+//     newDeck()    
     
-}
+// }
 
-if (!localStorage.getItem('bank')) {
-    localStorage.setItem('bank', 100)
-}
+// if (!localStorage.getItem('bank')) {
+//     localStorage.setItem('bank', 100)
+// }
+
+localStorage.setItem('bank', 100)
+newDeck()
 
 // display bank amount
-document.querySelector('#bankDisplay').textContent = `$ ${localStorage.getItem('bank')}` 
+document.querySelector('#bankDisplay').textContent = `${localStorage.getItem('bank')}` 
 
 
 //Drawing cards
-document.querySelectorAll('button').forEach(item => {
-    console.log(item.id)
-    
+document.querySelectorAll('button').forEach(item => {    
     if (item.id !== 'playAgain') {
         item.addEventListener('click', deal)
     }
@@ -41,9 +43,19 @@ document.querySelector('#same-btn').addEventListener('click', e => {
 
 
 
-function deal() {
 
-    let newBalance = localStorage.getItem('bank') - 10;
+
+function deal() {
+    
+    let bet = Number(document.querySelector('#betInput').value)
+    console.log(bet)
+    if (!(bet >= 0)) {
+        bet = Number(10);
+    }
+    
+    if (bet > localStorage.getItem('bank')) return;
+
+    let newBalance = localStorage.getItem('bank') - bet
     
     
     fetch(`https://deckofcardsapi.com/api/deck/${localStorage.getItem('deckId')}/draw/?count=2`)
@@ -52,8 +64,8 @@ function deal() {
         console.log(data)
         console.log(`current data: ${data.remaining}`)
 
-        if (data.remaining === 48 || localStorage.getItem('bank') === 0) {
-            document.querySelector('h1').textContent = 'Game Over!'
+        if (data.remaining <= 0 || localStorage.getItem('bank') <= 0) {
+            document.querySelector('h1').textContent = 'Game Over... Play Again?'
         } 
 
         // Get card values
@@ -67,8 +79,17 @@ function deal() {
         if( (result == 1 && choice === 'High') || (result == 2 && choice === 'Low') ||
         (result == 0 && choice === 'Same') ) {
             document.querySelector('h4').textContent = 'Correct!'
+        
 
-            newBalance += 100;
+            console.log(`bet : ${typeof bet} - ${bet}`)
+    
+            console.log(`wiFactor : ${typeof winFactor}`)
+            console.log(`product : ${typeof (winFactor * bet)}`)
+
+            console.log(`newBalance ${typeof newBalance}`)
+
+            newBalance = newBalance + (bet * winFactor);
+            // console.log(newBalance)
 
 
         }  else {
@@ -76,7 +97,8 @@ function deal() {
         }
 
         localStorage.setItem('bank', newBalance);
-        console.log('meaty')
+        document.querySelector('#bankDisplay').textContent = localStorage.getItem('bank')
+        document.querySelector('#remainingCards').textContent = data.remaining
 
     })
 
@@ -117,13 +139,25 @@ function convertRoyal(card) {
 
 function newDeck() {
 
+    document.querySelector('h1').textContent = "Let's Bet"
+
+    if (localStorage.getItem('bank') <= 0) {
+        localStorage.setItem('bank', 100)
+        console.log('happned')
+    }
+
+    document.querySelector('#bankDisplay').textContent = localStorage.getItem('bank')
+    
+
+    
+
     fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
     .then(res => res.json())
     .then(data=> {
-        console.log(data)
+        console.log(data)  
 
-        localStorage.setItem('deckId', data.deck_id)
-        localStorage.setItem('bank', 100)        
+        let deck = data.deck_id
+        localStorage.setItem('deckId', deck)
 
     })
     .catch(err => {

@@ -9,9 +9,14 @@
 </head>
 <body>
     <h1>Let's Bet</h1>
-    <h2>Bank: <span id='bankDisplay'>$</span></h2>
-    <h2>Bet: <span id='betDisplay'>$</span></h2>
+    <h2>Bank: $<span id='bankDisplay'></span></h2>
+    <!-- <h2>Bet: <span id='betDisplay'>$</span></h2> -->
     
+    <section>
+        <label for="betInput">Bet ($):</label>
+        <input id="betInput" type="Number" min='10' step='10' placeholder='10'>
+    </section>
+
 
 
     <button id='high-btn'>High</button>
@@ -19,11 +24,13 @@
     <button id='same-btn'>Same</button>
     <button id='playAgain'>Play Again</button>
 
+    <h3>Cards Remaining: <span id='remainingCards'></span></h3>
+
     <h3>Player: </h3>
-    <img id='player1Card' src="" alt="player 1 card">
+    <img id='player1Card' src="cadBack.jpg" alt="">
 
     <h3>Dealer: </h3>
-    <img id='player2Card' src="" alt="player 2 card">
+    <img id='player2Card' src="cadBack.jpg" alt="">
 
     <h4>Result: </h4>
     

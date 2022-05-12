@@ -1,22 +1,26 @@
 // global variables
 let choice;
 
+// Play again button - fetch new deck -> start new game
+document.querySelector('#playAgain').addEventListener('click', newDeck)
+
 
 // check unique for unique deck id
 if (!localStorage.getItem('deckId')) {
+    newDeck()
 
-    fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-    .then(res => res.json())
-    .then(data=> {
-        console.log(data)
+    // fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+    // .then(res => res.json())
+    // .then(data=> {
+    //     console.log(data)
 
-        localStorage.setItem('deckId', data.deck_id)
+    //     localStorage.setItem('deckId', data.deck_id)
 
         
-    })
-    .catch(err => {
-        console.log(`error: ${err}`)
-    })        
+    // })
+    // .catch(err => {
+    //     console.log(`error: ${err}`)
+    // })        
     
 }
 
@@ -26,7 +30,13 @@ if (!localStorage.getItem('playerScore')) {
 
 
 //Drawing cards
-document.querySelectorAll('button').forEach(item => item.addEventListener('click', deal));
+document.querySelectorAll('button').forEach(item => {
+    console.log(item.id)
+    
+    if (item.id !== 'playAgain') {
+        item.addEventListener('click', deal)
+    }
+});
 
 document.querySelector('#high-btn').addEventListener('click', e => {
 
@@ -56,9 +66,11 @@ function deal() {
     .then(data=> {
         console.log(data)
 
+        // Get card values
         document.querySelector('#player1Card').src = data.cards[0].image;
         document.querySelector('#player2Card').src = data.cards[1].image;
 
+        // compare results
         let result = compare(data.cards[0].value, data.cards[1].value)
         if( (result == 1 && choice === 'High') || (result == 2 && choice === 'Low') ||
         (result == 0 && choice === 'Same') ) {
@@ -102,4 +114,19 @@ function convertRoyal(card) {
         return Number(card)
     }
     
+}
+
+function newDeck() {
+
+    fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+    .then(res => res.json())
+    .then(data=> {
+        console.log(data)
+
+        localStorage.setItem('deckId', data.deck_id)
+
+    })
+    .catch(err => {
+        console.log(`error: ${err}`)
+    })      
 }

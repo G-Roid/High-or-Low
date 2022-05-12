@@ -1,32 +1,21 @@
 // global variables
-let choice;
+let choice; 
 
 // Play again button - fetch new deck -> start new game
 document.querySelector('#playAgain').addEventListener('click', newDeck)
 
-
 // check unique for unique deck id
 if (!localStorage.getItem('deckId')) {
-    newDeck()
-
-    // fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-    // .then(res => res.json())
-    // .then(data=> {
-    //     console.log(data)
-
-    //     localStorage.setItem('deckId', data.deck_id)
-
-        
-    // })
-    // .catch(err => {
-    //     console.log(`error: ${err}`)
-    // })        
+    newDeck()    
     
 }
 
-if (!localStorage.getItem('playerScore')) {
-    localStorage.setItem('playerScore', 0) 
+if (!localStorage.getItem('bank')) {
+    localStorage.setItem('bank', 100)
 }
+
+// display bank amount
+document.querySelector('#bankDisplay').textContent = `$ ${localStorage.getItem('bank')}` 
 
 
 //Drawing cards
@@ -39,18 +28,14 @@ document.querySelectorAll('button').forEach(item => {
 });
 
 document.querySelector('#high-btn').addEventListener('click', e => {
-
     choice = e.target.textContent;
 })
 
 document.querySelector('#low-btn').addEventListener('click', e => {
-
     choice = e.target.textContent;
-
 })
 
 document.querySelector('#same-btn').addEventListener('click', e => {
-
     choice = e.target.textContent;
 })
 
@@ -58,26 +43,40 @@ document.querySelector('#same-btn').addEventListener('click', e => {
 
 function deal() {
 
-    let currentScore = localStorage.getItem('playerScore')
-
-
+    let newBalance = localStorage.getItem('bank') - 10;
+    
+    
     fetch(`https://deckofcardsapi.com/api/deck/${localStorage.getItem('deckId')}/draw/?count=2`)
     .then(res => res.json())
     .then(data=> {
         console.log(data)
+        console.log(`current data: ${data.remaining}`)
+
+        if (data.remaining === 48 || localStorage.getItem('bank') === 0) {
+            document.querySelector('h1').textContent = 'Game Over!'
+        } 
 
         // Get card values
-        document.querySelector('#player1Card').src = data.cards[0].image;
-        document.querySelector('#player2Card').src = data.cards[1].image;
+        let cardAImage = document.querySelector('#player1Card').src = data.cards[0].image;
+        let cardBImage = document.querySelector('#player2Card').src = data.cards[1].image;
+
+                
 
         // compare results
         let result = compare(data.cards[0].value, data.cards[1].value)
         if( (result == 1 && choice === 'High') || (result == 2 && choice === 'Low') ||
         (result == 0 && choice === 'Same') ) {
-            document.querySelector('h3').textContent = 'Correct!'
+            document.querySelector('h4').textContent = 'Correct!'
+
+            newBalance += 100;
+
+
         }  else {
-            document.querySelector('h3').textContent = 'Wrong...'
+            document.querySelector('h4').textContent = 'Wrong...'
         }
+
+        localStorage.setItem('bank', newBalance);
+        console.log('meaty')
 
     })
 
@@ -124,9 +123,15 @@ function newDeck() {
         console.log(data)
 
         localStorage.setItem('deckId', data.deck_id)
+        localStorage.setItem('bank', 100)        
 
     })
     .catch(err => {
         console.log(`error: ${err}`)
     })      
+}
+
+
+function checkGameOver(a, b) {
+    (a == null || b == null) ? true : false;
 }

@@ -51,6 +51,10 @@ function deal() {
     console.log(bet)
     if (!(bet >= 0)) {
         bet = Number(10);
+    } 
+
+    if (bet === 0) {
+        bet = 10;
     }
     
     if (bet > localStorage.getItem('bank')) return;

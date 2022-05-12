@@ -7,10 +7,17 @@ if (!localStorage.getItem('deckId')) {
         console.log(data)
 
         localStorage.setItem('deckId', data.deck_id)
+
+        
     })
     .catch(err => {
         console.log(`error: ${err}`)
-    })    
+    })        
+    
+}
+
+if (!localStorage.getItem('playerScore')) {
+    localStorage.setItem('playerScore', 0) 
 }
 
 
@@ -18,6 +25,11 @@ if (!localStorage.getItem('deckId')) {
 document.querySelector('button').addEventListener('click', deal);
 
 function deal() {
+
+    let currentScore = localStorage.getItem('playerScore')
+    console.log(currentScore)
+
+
     fetch(`https://deckofcardsapi.com/api/deck/${localStorage.getItem('deckId')}/draw/?count=2`)
     .then(res => res.json())
     .then(data=> {
@@ -29,6 +41,10 @@ function deal() {
         let result = compare(data.cards[0].value, data.cards[1].value)
         if(result == 1) {
             document.querySelector('h3').textContent = 'Player 1 Wins'
+
+
+
+            
         } else if (result == 2) {
             document.querySelector('h3').textContent = 'Player 2 Wins'
         } else {

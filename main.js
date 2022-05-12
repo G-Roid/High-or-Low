@@ -1,3 +1,7 @@
+// global variables
+let choice;
+
+
 // check unique for unique deck id
 if (!localStorage.getItem('deckId')) {
 
@@ -22,12 +26,29 @@ if (!localStorage.getItem('playerScore')) {
 
 
 //Drawing cards
-document.querySelector('button').addEventListener('click', deal);
+document.querySelectorAll('button').forEach(item => item.addEventListener('click', deal));
+
+document.querySelector('#high-btn').addEventListener('click', e => {
+
+    choice = e.target.textContent;
+})
+
+document.querySelector('#low-btn').addEventListener('click', e => {
+
+    choice = e.target.textContent;
+
+})
+
+document.querySelector('#same-btn').addEventListener('click', e => {
+
+    choice = e.target.textContent;
+})
+
+
 
 function deal() {
 
     let currentScore = localStorage.getItem('playerScore')
-    console.log(currentScore)
 
 
     fetch(`https://deckofcardsapi.com/api/deck/${localStorage.getItem('deckId')}/draw/?count=2`)
@@ -39,19 +60,13 @@ function deal() {
         document.querySelector('#player2Card').src = data.cards[1].image;
 
         let result = compare(data.cards[0].value, data.cards[1].value)
-        if(result == 1) {
-            document.querySelector('h3').textContent = 'Player 1 Wins'
-
-
-
-            
-        } else if (result == 2) {
-            document.querySelector('h3').textContent = 'Player 2 Wins'
-        } else {
-            document.querySelector('h3').textContent = 'War'
+        if( (result == 1 && choice === 'High') || (result == 2 && choice === 'Low') ||
+        (result == 0 && choice === 'Same') ) {
+            document.querySelector('h3').textContent = 'Correct!'
+        }  else {
+            document.querySelector('h3').textContent = 'Wrong...'
         }
 
-        document.querySelector('h3').t
     })
 
     .catch(err => {

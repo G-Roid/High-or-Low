@@ -8,4 +8,4 @@ The information recieved from the API is filtered and displayed. Local storage i
 Demo:
 Live Site: [g-roid.github.io/cardbet-game/]
 
-![alt tag](g-roid.github.io/cardbet-game/cardBack.jpg)
+![alt tag]('g-roid.github.io/cardbet-game/cardBack.jpg')

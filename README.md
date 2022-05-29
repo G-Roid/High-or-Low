@@ -1,11 +1,7 @@
-![alt tag](https://g-roid.github.io/cardBet-game/img/cardBack.jpg)
-
-
-
-<h1 align="center">High or Low | <a href="https://g-roid.github.io/cardBet-game/">Visit here!</a></h1>
+<h1 align="center">High or Low | <a href="https://g-roid.github.io/High-or-Low/">Visit here!</a></h1>
 <div align="center">
   <a href='#'>
-	  <img src="cardBack.jpg" width="100%" />
+	  <img src="https://github.com/G-Roid/High-or-Low/blob/main/cardBack.jpg" width="100%" />
   </a>
 </div>
 

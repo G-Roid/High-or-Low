@@ -5,7 +5,7 @@
 <h1 align="center">High or Low | <a href="https://g-roid.github.io/cardBet-game/">Visit here!</a></h1>
 <div align="center">
   <a href='#'>
-	  <img src="https://g-roid.github.io/cardBet-game/img/cardBack.jpg" width="100%" />
+	  <img src="cardBack.jpg" width="100%" />
   </a>
 </div>
 
